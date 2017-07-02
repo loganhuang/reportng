@@ -1,0 +1,25 @@
+*.class
+.classpath
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+*.classpath
+*.project
+log/
+test-output/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.swp
+*.log
+# nodejs local modules
+.tags*
+.idea/
+*.iml
+.gradle/
+.settings/
+target/
+hs_err_pid*
+

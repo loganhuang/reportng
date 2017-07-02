@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" font-weight="http://www.w3.org/1999/xhtml"
+      xml:lang="$messages.locale.language" lang="$messages.locale.language">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta name="description" content="TestNG unit test results."/>
+</head>
+<body>
+<p><font size="4" face="arial" color="#a52a2a">Execution date: $meta.reportDate $meta.reportTime</font></p>
+    #foreach ($suite in $suites)
+    <p style="font-size: 1.4em; font-weight: bold; text-align: left;">${suite.name} Summary</p>
+    <table border="1" cellpadding="0" cellspacing="0" width="800px" style="border-collapse: collapse;">
+        #set ($suiteId = $velocityCount)
+        #set ($totalTests = 0)
+        #set ($totalPassed = 0)
+        #set ($totalSkipped = 0)
+        #set ($totalFailed = 0)
+        #set ($testCount = 0)
+        <tr>
+            <td style="font-weight: normal; font-size: 120%;">Tests</td>
+            <th style="font-weight: normal; font-size: 120%;font-weight: bold;">$messages.getString("duration")</th>
+            <th style="font-weight: normal; font-size: 120%;font-weight: bold;">$messages.getString("passed")</th>
+            <th style="font-weight: normal; font-size: 120%;font-weight: bold;">$messages.getString("skipped")</th>
+            <th style="font-weight: normal; font-size: 120%;font-weight: bold;">$messages.getString("failed")</th>
+            <th style="font-weight: normal; font-size: 120%;font-weight: bold;">$messages.getString("passRate")</th>
+        </tr>
+        #foreach ($result in $suite.results)
+            #set ($notPassedTests = $result.testContext.skippedTests.size() + $result.testContext.failedTests.size())
+            #set ($total = $result.testContext.passedTests.size() + $notPassedTests)
+            #set ($totalTests = $totalTests + $total)
+            #set ($totalPassed = $totalPassed + $result.testContext.passedTests.size())
+            #set ($totalSkipped = $totalSkipped + $result.testContext.skippedTests.size())
+            #set ($totalFailed = $totalFailed + $result.testContext.failedTests.size())
+            #set ($failuresExist = $result.testContext.failedTests.size()>0 || $result.testContext.failedConfigurations.size()>0)
+
+            #if (($onlyReportFailures && $failuresExist) || (!$onlyReportFailures))
+                <tr style="background-color: #eeeeee; padding-left: 2px;">
+                    <td style="background-color: #eeeeee; padding-left: 2px;text-align: left;">
+                        ${result.testContext.name}
+                    </td>
+                    <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold; background-color: gainsboro;">
+                        $utils.formatDuration($utils.getDuration($result.testContext))s
+                    </td>
+
+                    #if ($result.testContext.passedTests.size() > 0)
+                        <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold; background-color: #88ee88;">$result.testContext.passedTests.size()</td>
+                    #else
+                        <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold;">
+                            0
+                        </td>
+                    #end
+
+                    #if ($result.testContext.skippedTests.size() > 0)
+                        <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold; background-color: #ffff77;">$result.testContext.skippedTests.size()</td>
+                    #else
+                        <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold;">
+                            0
+                        </td>
+                    #end
+
+                    #if ($result.testContext.failedTests.size() > 0)
+                        <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold; background-color: #ff8888;">$result.testContext.failedTests.size()</td>
+                    #else
+                        <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold;">
+                            0
+                        </td>
+                    #end
+
+                    #if($result.testContext.failedTests.size()>0)
+                        <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold; background-color: #ff8888;">
+                            #if ($total > 0)
+                                #set ($passes = $total - $notPassedTests)
+                                $utils.formatPercentage($passes, $total)
+                            #else
+                                $messages.getString("notApplicable")
+                            #end
+                        </td>
+                    #else
+                        <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold; background-color: #88ee88;">
+                            #if ($total > 0)
+                                 #set ($passes = $total - $notPassedTests)
+                                 $utils.formatPercentage($passes, $total)
+                            #else
+                                $messages.getString("notApplicable")
+                            #end
+                        </td>
+                    #end
+                </tr>
+            #end
+            #set($testCount = $testCount +1)
+        #end
+    ##如果test数大于1，显示总的统计数
+        #if($testCount > 1)
+            <tr>
+                <td colspan="2"
+                    style="width: 400px;padding-top: 5px;padding-bottom: 5px;text-align: left; font-size: 120%;font-weight: bold;">
+                    Total
+                </td>
+                #if ($totalPassed > 0)
+                    <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold; background-color: #88ee88;">$totalPassed</td>
+                #else
+                    <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold;">
+                        0
+                    </td>
+                #end
+
+                #if ($totalSkipped > 0)
+                    <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold; background-color: #ffff77;">$totalSkipped</td>
+                #else
+                    <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold;">
+                        0
+                    </td>
+                #end
+
+                #if ($totalFailed > 0)
+                    <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold; background-color: #ff8888;">$totalFailed</td>
+                #else
+                    <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold;">
+                        0
+                    </td>
+                #end
+
+                #if($totalFailed>0)
+                    <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold; background-color: #ff8888;">
+                        #if ($totalTests > 0)
+                        #set ($totalPasses = $totalTests - $totalSkipped - $totalFailed)
+                        $utils.formatPercentage($totalPasses, $totalTests)
+                    #else
+                            $messages.getString("notApplicable")
+                        #end
+                    </td>
+                #else
+                    <td style="width: 100px;padding-top: 5px;padding-bottom: 5px;text-align: center; font-size: 120%;font-weight: bold; background-color: #88ee88;">
+                        #if ($totalTests > 0)
+                        #set ($totalPasses = $totalTests - $totalSkipped - $totalFailed)
+                        $utils.formatPercentage($totalPasses, $totalTests)
+                    #else
+                            $messages.getString("notApplicable")
+                        #end
+                    </td>
+                #end
+            </tr>
+        #end
+    </table>
+    #end
+
+
+    #foreach($suiteCount in [0 .. $utils.getSuitesSize($suitesMap)])
+    <p style="font-size: 1.4em; font-weight: bold; text-align: left;">$utils.getSuiteName($suitesNameMap,"$suiteCount")
+        Details</p>
+    <table border="1" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
+        #foreach($testCount in [0 .. $utils.getResultsSize($suitesMap,"$suiteCount")])
+
+            #if($utils.hasFailedTest($suitesMap,"$suiteCount","$testCount")||$utils.hasPassedTest($suitesMap,"$suiteCount","$testCount"))
+                <tr font-weight: bold style="background-color: #d5daff;">
+                    <th align="left" colspan="6" style="font-size: 120%;font-weight: bold">$utils.getResultName($resultsNameMap,"$suiteCount","$testCount")</th>
+                </tr>
+            ##fail cases
+                #if($utils.hasFailedTest($suitesMap,"$suiteCount","$testCount"))
+                    <tr font-weight: bold style="background-color:#ff8888;">
+                        <th>ID</th>
+                        <th>Case</th>
+                        <th>Parameter</th>
+                        <th>Duration</th>
+                        <th>Output</th>
+                    </tr>
+                    #foreach($failed in $utils.getFailedTests($suitesMap,"$suiteCount","$testCount"))
+                        <tr>
+                            <td>$velocityCount</td>
+                            <td>${failed.testName}</td>
+                            <td>${failed.params}</td>
+                            <td>${failed.duration}</td>
+                            <td>
+                                #foreach($o in $failed.output)
+                                    $o<br/>
+                                #end
+                            </td>
+                        </tr>
+                    #end
+                #end
+            ##skip cases
+                #if($utils.hasSkippedTest($suitesMap,"$suiteCount","$testCount"))
+                    <tr font-weight: bold style="background-color:#ffff77;">
+                        <th>ID</th>
+                        <th>Case</th>
+                        <th>Parameter</th>
+                        <th>Duration</th>
+                        <th>Output</th>
+                    </tr>
+                    #foreach($skipped in $utils.getSkippedTests($suitesMap,"$suiteCount","$testCount"))
+                        <tr>
+                            <td>$velocityCount</td>
+                            <td>${skipped.testName}</td>
+                            <td>${skipped.params}</td>
+                            <td>${skipped.duration}</td>
+                            <td>
+                                #foreach($o in $skipped.output)
+                                    $o<br/>
+                                #end
+                            </td>
+                        </tr>
+                    #end
+                #end
+            ##pass cases
+                #if($utils.hasPassedTest($suitesMap,"$suiteCount","$testCount"))
+                    <tr font-weight: bold style="background-color:#88ee88;">
+                        <th>ID</th>
+                        <th>Case</th>
+                        <th>Parameter</th>
+                        <th>Duration</th>
+                        <th>Output</th>
+                    </tr>
+                    #foreach($passed in $utils.getPassedTests($suitesMap,"$suiteCount","$testCount"))
+                        <tr>
+                            <td>$velocityCount</td>
+                            <td>${passed.testName}</td>
+                            <td>${passed.params}</td>
+                            <td>${passed.duration}</td>
+                            <td>
+                                #foreach($o in $passed.output)
+                                    $o<br/>
+                                #end
+                            </td>
+                        </tr>
+                    #end
+                #end
+            #end
+        #end
+    </table>
+    #end
+
+</body>
+</html>
