@@ -69,6 +69,7 @@ public class HTMLReporter extends AbstractReporter {
 
     public HTMLReporter() {
         super(TEMPLATES_PATH);
+        System.setProperty("mail.result", "PASS");
     }
 
 
@@ -171,8 +172,6 @@ public class HTMLReporter extends AbstractReporter {
                 IResultMap failedTests = testContext.getFailedTests();//测试失败的测试方法
                 if (failedTests.getAllMethods().size() > 0) {
                     System.setProperty("mail.result", "FAIL");
-                } else {
-                    System.setProperty("mail.result", "PASS");
                 }
 
                 IResultMap skippedTests = testContext.getSkippedTests();//测试跳过的测试方法
