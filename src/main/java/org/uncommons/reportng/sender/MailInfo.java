@@ -23,10 +23,10 @@ public class MailInfo {
     public Properties getProperties() {
         Properties properties = new Properties();
         properties.put("mail.smtp.host", this.mailServerHost);
-        //properties.put("mail.smtp.port", this.mailServerPort);
+        properties.put("mail.smtp.port", "587");
         //or us starttls
         properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.auth", validate ? "true" : "false");
+        properties.put("mail.smtp.auth", "true");
         return properties;
     }
 

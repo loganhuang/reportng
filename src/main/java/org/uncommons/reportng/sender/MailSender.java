@@ -29,7 +29,7 @@ public class MailSender {
             InputStream inputStream = new FileInputStream(new File("email.properties"));
             properties.load(inputStream);
             mailInfo.setMailServerHost(properties.getProperty("smtp"));
-            mailInfo.setMailServerPort(properties.getProperty("port"));
+//            mailInfo.setMailServerPort(properties.getProperty("port"));
             mailInfo.setUserName(properties.getProperty("username"));
             mailInfo.setPassword(properties.getProperty("password"));
             mailInfo.setFromAddress(properties.getProperty("from"));
